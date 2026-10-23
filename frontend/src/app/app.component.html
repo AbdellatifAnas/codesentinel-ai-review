@@ -1,0 +1,70 @@
+<div style="display: flex; height: 100vh; font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc;">
+  <aside style="width: 300px; border-right: 1px solid #1e293b; padding: 1.25rem; overflow-y: auto;">
+    <h2 style="margin-top: 0; color: #38bdf8;">🛡️ CodeSentinel AI</h2>
+    <p style="font-size: 0.85rem; color: #94a3b8;">Recent Code Audits</p>
+    <div *ngFor="let item of reviews"
+         (click)="selectedReview = item"
+         [style.background]="selectedReview?.id === item.id ? '#1e293b' : 'transparent'"
+         style="padding: 0.75rem; border-radius: 8px; cursor: pointer; margin-bottom: 0.5rem; border: 1px solid #334155;">
+      <div style="font-weight: 600;">{{ item.title }}</div>
+      <div style="font-size: 0.8rem; color: #94a3b8; display: flex; justify-content: space-between; margin-top: 4px;">
+        <span>{{ item.language }}</span>
+        <span>Q: {{ item.qualityScore }} | S: {{ item.securityScore }}</span>
+      </div>
+    </div>
+  </aside>
+
+  <main style="flex: 1; padding: 2rem; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+    <section>
+      <h3>Submit Code for AI Audit</h3>
+      <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+        <input [(ngModel)]="form.title" placeholder="File / Class Name"
+               style="flex: 1; padding: 0.6rem; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: white;" />
+        <select [(ngModel)]="form.language"
+                style="padding: 0.6rem; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: white;">
+          <option>Java</option>
+          <option>SQL</option>
+          <option>TypeScript</option>
+          <option>Python</option>
+        </select>
+      </div>
+      <textarea [(ngModel)]="form.code" rows="16" placeholder="Paste Java service, controller, or SQL query here..."
+                style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #334155; background: #020617; color: #e2e8f0; font-family: monospace;"></textarea>
+      <button (click)="analyzeCode()" [disabled]="isLoading"
+              style="margin-top: 1rem; width: 100%; padding: 0.8rem; background: #0284c7; color: white; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
+        {{ isLoading ? 'Analyzing with Gemini AI...' : 'Run Security & Quality Review' }}
+      </button>
+    </section>
+
+    <section *ngIf="selectedReview">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3>Review Report: {{ selectedReview.title }}</h3>
+        <div>
+          <span style="background: #0369a1; padding: 6px 12px; border-radius: 20px; margin-right: 8px;">
+            Quality: {{ selectedReview.qualityScore }}/100
+          </span>
+          <span style="background: #b91c1c; padding: 6px 12px; border-radius: 20px;">
+            Security: {{ selectedReview.securityScore }}/100
+          </span>
+        </div>
+      </div>
+
+      <p style="background: #1e293b; padding: 1rem; border-radius: 8px; line-height: 1.5;">
+        {{ selectedReview.summary }}
+      </p>
+
+      <h4>Detected Issues ({{ selectedReview.issues.length }})</h4>
+      <div *ngFor="let issue of selectedReview.issues"
+           style="background: #1e293b; border-left: 4px solid #ef4444; padding: 0.75rem; margin-bottom: 0.75rem; border-radius: 4px;">
+        <strong>[{{ issue.severity }} - {{ issue.category }}] Line {{ issue.lineNumber }}</strong>
+        <p style="margin: 0.4rem 0;">{{ issue.description }}</p>
+        <code style="display: block; background: #020617; padding: 0.5rem; border-radius: 4px; color: #4ade80;">
+          Fix: {{ issue.suggestedFix }}
+        </code>
+      </div>
+
+      <h4>Refactored Code</h4>
+      <pre style="background: #020617; padding: 1rem; border-radius: 8px; overflow-x: auto;"><code>{{ selectedReview.refactoredSuggestion }}</code></pre>
+    </section>
+  </main>
+</div>
