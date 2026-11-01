@@ -1,10 +1,6 @@
 # 🛡️ CodeSentinel AI — Automated Code Review & PR Security Engine
 
-![Java](https://img.shields.io/badge/Java-17-orange)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2-brightgreen)
-![Angular](https://img.shields.io/badge/Angular-17-red)
-![MySQL](https://img.shields.io/badge/MySQL-8.0-blue)
-![Gemini AI](https://img.shields.io/badge/Google_Gemini-2.5_Flash-purple)
+
 
 An enterprise-grade AI code auditing platform built with **Java 17**, **Spring Boot 3**, **Angular**, and **Google Gemini API**. CodeSentinel AI analyzes source code and GitHub Pull Request diffs in real time to detect OWASP security vulnerabilities, N+1 query bottlenecks, concurrency bugs, and Clean Code violations.
 
